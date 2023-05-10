@@ -100,19 +100,23 @@ class Window(tk.Tk):
                 scrollregion=canvas.bbox(tk.ALL)
             )
         )
-        # covid19Lst = covid19Data
+        # co2Lst = co2Data
         if not co2Data is None:
-            for index,covid in enumerate(co2Data):
-                tk.Label(self.displayFrame, text=covid.seq,font=("Courier", 11), bg='#ccc').grid(row=index, column=0,sticky=tk.E,padx=10)
-                tk.Label(self.displayFrame, text=covid.country,font=("Courier", 11), bg='#ccc').grid(row=index, column=1,sticky=tk.W)
-                tk.Label(self.displayFrame, text=covid.year,font=("Courier", 11), bg='#ccc').grid(row=index, column=2,sticky=tk.W)
-                tk.Label(self.displayFrame, text=covid.population,font=("Courier", 11), bg='#ccc').grid(row=index, column=3,sticky=tk.E)
-                co2Label = tk.Label(self.displayFrame, text=covid.co2, bg='#ccc')
-                deathsStr = covid.deaths
-                deathsInt = int(deathsStr.replace(',',''))
-                if deathsInt > 100000:
-                    deathsLabel['fg'] = 'red'
-                deathsLabel.grid(row=index, column=4,sticky=tk.E,padx=50)
+            for index,co2 in enumerate(co2Data):
+                tk.Label(self.displayFrame, text=co2.seq, font=("Courier", 11), bg='#ccc').grid(row=index, column=0, sticky=tk.E, padx=10)
+                tk.Label(self.displayFrame, text=co2.country, font=("Courier", 11), bg='#ccc').grid(row=index, column=1, sticky=tk.W)
+                tk.Label(self.displayFrame, text=co2.year, font=("Courier", 11), bg='#ccc').grid(row=index, column=2, sticky=tk.W)
+                tk.Label(self.displayFrame, text=co2.population, font=("Courier", 11), bg='#ccc').grid(row=index, column=3, sticky=tk.E)
+                co2Label = tk.Label(self.displayFrame,text=co2.co2, bg='#ccc')
+                co2Str = co2.co2
+                if co2Str:
+                    co2Float = float(co2Str.replace(',',''))
+                    if co2Float > 100000:
+                        co2Label['fg'] = 'red'
+                co2Label.grid(row=index, column=4,sticky=tk.E,padx=50)
+        
+            tk.Label(self.displayFrame, text="", bg='#ccc').grid(row=len(co2Data), column=0)
+            
         # self.displayFrame.pack()
         canvas.create_window((0,0),window=self.displayFrame, anchor=tk.NW)
         # canvas.config(yscrollcommand=canvasScrollBar.set)
@@ -128,7 +132,7 @@ class Window(tk.Tk):
         if area is None or len(area)==0:
             messagebox.showinfo("訊息", "請輸入國家/地區 !")
         else:
-            for co in self.covid19Data:
+            for co in self.co2Data:
                 # print(covid.seq, covid.country_ch, len(covid.country_ch))
                 if co.country == area or co.country == area:
                     self.co2Info.seq = co.seq
@@ -142,7 +146,7 @@ class Window(tk.Tk):
             if not self.co2Info.year is None:
                 # print('message',self.covid19Info.country_ch)
                 pw = PopupDialog(self)
-                self.wait_window(pw)  # 這一句很重要！！！
+                self.wait_window(pw)  # 這一句很重要！
                 return
             else:
                 # print('area=',area)
